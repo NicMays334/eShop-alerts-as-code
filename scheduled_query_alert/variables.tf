@@ -13,3 +13,12 @@ variable "resourceRegion"{
     default = "eastus2"
     description = "Location for the resource(s)."
 }
+
+variable "sqa" {
+    type=map(object({
+        resLocation = string
+        resName = string
+        alertDescription = string
+    }))
+    
+}

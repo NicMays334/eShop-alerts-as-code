@@ -14,8 +14,9 @@ provider "azurerm" {
 
 #Deploy a sample log query alert
 resource "azurerm_monitor_scheduled_query_rules_alert" "Samplelogqueryalert" {
-    name                = "sample-qa-1"
-    location            = var.resourceRegion
+    for_each            = var.sqa
+    name                = each.value["resName"]
+    location            = each.value["resLocation"]
     resource_group_name = var.logAnalyticsResourceGroupName
 
     action {
@@ -25,10 +26,10 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "Samplelogqueryalert" {
     }
 
     data_source_id = var.logAnalyticsResourceID
-    description    = "<SLO Description> "
+    description    = each.value["alertDescription"]
     enabled        = true
     query       = <<-QUERY
-    Event 
+        Event 
         | where EventLevelName == "Error" | summarize count() by Computer
     QUERY
     
