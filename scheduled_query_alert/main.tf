@@ -14,9 +14,9 @@ provider "azurerm" {
 
 #Deploy a sample log query alert
 resource "azurerm_monitor_scheduled_query_rules_alert" "Samplelogqueryalert" {
-    for_each            = var.sqa
-    name                = each.value["resName"]
-    location            = each.value["resLocation"]
+    for_each            = var.SLOs
+    name                = join("", [each.value["userJourneyCategory"], "-", each.value["sloCategory"], each.value["sloPercentile"]])
+    location            = var.resourceRegion
     resource_group_name = var.logAnalyticsResourceGroupName
 
     action {
@@ -26,19 +26,18 @@ resource "azurerm_monitor_scheduled_query_rules_alert" "Samplelogqueryalert" {
     }
 
     data_source_id = var.logAnalyticsResourceID
-    description    = each.value["alertDescription"]
+    description    = each.value["sloDescription"]
     enabled        = true
     query       = <<-QUERY
-        Event 
-        | where EventLevelName == "Error" | summarize count() by Computer
+        ${each.value["signalQuery"]}
     QUERY
     
-    severity    = 4
-    frequency   = 15
-    time_window = 60
+    severity    = each.value["signalSeverity"]
+    frequency   = each.value["frequency"]
+    time_window = each.value["time_window"]
     
     trigger {
-        operator  = "GreaterThan"
-        threshold = 1
+        operator  = each.value["triggerOperator"]
+        threshold = each.value["triggerThreshold"]
     }
 }

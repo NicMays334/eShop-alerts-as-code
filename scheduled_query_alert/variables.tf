@@ -5,7 +5,7 @@ variable "logAnalyticsResourceID" {
 
 variable "logAnalyticsResourceGroupName"{
     type = string
-    description = "Name of Resource Group containg Log Analytics workspace"
+    description = "Name of Resource Group containing Log Analytics workspace"
 }
 
 variable "resourceRegion"{
@@ -14,11 +14,18 @@ variable "resourceRegion"{
     description = "Location for the resource(s)."
 }
 
-variable "sqa" {
+variable "SLOs" {
     type=map(object({
-        resLocation = string
-        resName = string
-        alertDescription = string
+        userJourneyCategory = string,
+        sloCategory = string,
+        sloPercentile = string,
+        sloDescription = string,
+        signalQuery = string,
+        signalSeverity = string,
+        frequency = number,
+        time_window = number,
+        triggerOperator = string,
+        triggerThreshold = number
     }))
     
 }
