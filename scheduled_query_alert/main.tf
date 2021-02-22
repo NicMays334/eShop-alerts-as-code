@@ -13,22 +13,24 @@ provider "azurerm" {
 }
 
 #Deploy a sample log query alert
-resource "azurerm_monitor_scheduled_query_rules_alert" "Samplelogqueryalert" {
+resource "azurerm_monitor_scheduled_query_rules_alert" "SLO_ALERT" {
     for_each            = var.SLOs
-    name                = join("", [each.value["userJourneyCategory"], "-", each.value["sloCategory"], each.value["sloPercentile"]])
+    name                = format("%s-%s%s", each.value["userJourneyCategory"], each.value["sloCategory"], 
+                            each.value["sloPercentile"])
     location            = var.resourceRegion
     resource_group_name = var.logAnalyticsResourceGroupName
 
     action {
-        action_group           = []
-        email_subject          = "Email Header"
-        custom_webhook_payload = "{}"
+        action_group           = var.alertActionGroups
+        email_subject          = format("Alert - SLO Breach: %s-%s%s", each.value["userJourneyCategory"], 
+                                    each.value["sloCategory"], each.value["sloPercentile"])
+        custom_webhook_payload = var.webHookPayLoad
     }
 
     data_source_id = var.logAnalyticsResourceID
     description    = each.value["sloDescription"]
     enabled        = true
-    query       = <<-QUERY
+    query          = <<-QUERY
         ${each.value["signalQuery"]}
     QUERY
     
