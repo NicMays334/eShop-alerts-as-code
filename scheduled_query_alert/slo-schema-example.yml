@@ -1,0 +1,85 @@
+---
+# This is an example SLO definition to be used with the sample applications
+# in this repo that expose a REST interface
+service-id: 86b7f217-2d3c-46ba-9286-5b3b33ea09e2
+datasources:
+  - id: qualityslosample
+    type: mdm
+    endpoint: int2.metrics.nsatc.net
+    accountids:
+      - qualityslo
+slo-groups:
+  - name: Quality Request Service
+    component-id: 4bb4ff53-585e-46c0-8fd1-b5c7a521f378
+    state: Test
+    slos:
+      - name: Success Rate
+        source-id: qualityslosample
+        description: 99.99% of requests in the last 5 minutes were successful
+        category: Success Rate
+        namespace: QualitySlo
+        signal: >-
+         metric("ResponseLatencyMs").dimensions("CustomerResourceId", "LocationId", "HttpStatusCode").samplingTypes("Count")
+         | where HttpStatusCode != "500"
+         | summarize SuccessCount = sum(Count) by CustomerResourceId
+         | zoom SuccessCount5m = sum(SuccessCount) by 5m
+         | join (metric("ResponseLatencyMs").dimensions("CustomerResourceId", "LocationId").samplingTypes("Count" as TotalCount)
+         | zoom TotalCount5m = sum(TotalCount) by 5m)
+         | project Value = (replacenulls(SuccessCount5m, 0) / TotalCount5m) * 100.0
+        window: PT5M
+        targets:
+          - target-value: '99.99'
+            comparator: gte
+      - name: Latency
+        source-id: qualityslosample
+        description: Latency Targets
+        category: Latency
+        namespace: QualitySlo
+        signal: >-
+          metric("ResponseLatencyMs").dimensions("CustomerResourceId",
+          "LocationId").samplingTypes(
+           "50th percentile" as P50, 
+           "P75" as P75, 
+           "90th percentile" as P90, 
+           "99th percentile" as P99, 
+           "P99.9" as P999, 
+           "P99.99" as P9999
+          ).resolution(5m)
+        window: PT5M
+        targets:
+          - description: >-
+              Requests in the last 5 minutes are served in under 100
+              milliseconds at the 50th percentile
+            target-percentile: '50'
+            target-value: '100'
+            comparator: lt
+          - description: >-
+              Requests in the last 5 minutes are served in under 200
+              milliseconds at the 75th percentile
+            target-percentile: '75'
+            target-value: '200'
+            comparator: lt
+          - description: >-
+              Requests in the last 5 minutes are served in under 300
+              milliseconds at the 90th percentile
+            target-percentile: '90'
+            target-value: '300'
+            comparator: lt
+          - description: >-
+              Requests in the last 5 minutes are served in under 750
+              milliseconds at the 99th percentile
+            target-percentile: '99'
+            target-value: '750'
+            comparator: lt
+          - description: >-
+              Requests in the last 5 minutes are served in under 1000
+              milliseconds at the 99.9th percentile
+            target-percentile: '99.9'
+            target-value: '1000'
+            comparator: lt
+          - description: >-
+              Requests in the last 5 minutes are served in under 3000
+              milliseconds at the 99.99th percentile
+            target-percentile: '99.99'
+            target-value: '3000'
+            comparator: lt
