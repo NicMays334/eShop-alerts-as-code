@@ -1,5 +1,5 @@
-logAnalyticsResourceID="/subscriptions/418cdf66-3b71-491f-b462-ad1f6658b7a3/resourceGroups/eShop-Alert-Automation/providers/Microsoft.OperationalInsights/workspaces/la-eshop"
-logAnalyticsResourceGroupName="eShop-Alert-Automation"
+logAnalyticsResourceID="" #Your Log Analytics Resource ID
+logAnalyticsResourceGroupName="" #Resource Group Name where you've created your Log Analytics Resource 
 resourceRegion="eastus2"
 
 # SLOs as Code Example 
