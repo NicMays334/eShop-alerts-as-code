@@ -9,6 +9,12 @@ on:
         default: 'default execution'
         # Input has to be provided for the workflow to run
         required: false
+
+defaults:
+  run:
+    working-directory: 
+      scheduled_query_alert
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -22,14 +28,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Format
-        run: terraform fmt -check
-
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
