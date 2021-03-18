@@ -1,5 +1,5 @@
-logAnalyticsResourceID=-eshop=""
-logAnalyticsResourceGroupName="eShop-Alert-Automation"
+logAnalyticsResourceID="" #Your Log Analytics Resource ID
+logAnalyticsResourceGroupName="" #Resource Group Name where you've created your Log Analytics Resource 
 resourceRegion="eastus2"
 
 # SLOs as Code Example 
