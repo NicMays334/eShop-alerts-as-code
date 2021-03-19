@@ -28,17 +28,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Azure Login
-        uses: Azure/login@v1
-        with:
-        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-
+        
       - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
+        env:
+          ARM_CLIENT_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+          ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
         run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
+
+      # Hey Nic . . . rerun the rbac stuff with scope Contributer after az login
+      # remove the az login deal from the job
