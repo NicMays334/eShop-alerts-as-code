@@ -35,12 +35,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        env:
-          TF_VAR_AZ_CLIENT_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
-          TF_VAR_AZ_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
-          TF_VAR_AZ_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
-          TF_VAR_AZ_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
-        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }} -auto-approve
+        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
 
       # Hey Nic . . . rerun the rbac stuff with scope Contributer after az login
       # remove the az login deal from the job
