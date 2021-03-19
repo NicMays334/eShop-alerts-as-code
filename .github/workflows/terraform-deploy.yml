@@ -36,10 +36,10 @@ jobs:
 
       - name: Terraform Plan
         env:
-          ARM_CLIENT_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
-          ARM_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
+          TF_VAR_CLIENT_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+          TF_VAR_CLIENT_SECRET: ${{secrets.TF_ARM_CLIENT_SECRET}}
+          TF_VAR_SUBSCRIPTION_ID: ${{secrets.TF_ARM_SUBSCRIPTION_ID}}
+          TF_VAR_TENANT_ID: ${{secrets.TF_ARM_TENANT_ID}}
         run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
 
       # Hey Nic . . . rerun the rbac stuff with scope Contributer after az login
