@@ -1,22 +1,4 @@
-variable "AZ_SUBSCRIPTION_ID" {
-    type        = string
-    description = "Subscription ID"
-}
 
-variable "AZ_CLIENT_ID" {
-    type        = string
-    description = "Client ID"
-}
-
-variable "AZ_CLIENT_SECRET" {
-    type        = string
-    description = "Client Secret"
-}
-
-variable "AZ_TENANT_ID" {
-    type        = string
-    description = "Tenant ID"
-}
 
 variable "logAnalyticsResourceID" {
     type        = string
