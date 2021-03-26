@@ -39,7 +39,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }} -out=alertPlan
+        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
 
       - name: Terraform Apply
-        run: terraform apply alertPlan -auto-approve
+        run: terraform apply -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }} -auto-approve
