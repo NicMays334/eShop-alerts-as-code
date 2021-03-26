@@ -28,7 +28,7 @@ SLOs = {
         userJourneyCategory = "Login",
         sloCategory         = "SuccessRate",
         sloPercentile       = ""
-        sloDescription      = "99.9% of \"login\" request in the last 60 mins were successful (HTTP Response Code: 200) as measured at API Gateway ",
+        sloDescription      = "99.9% of \"login\" request in the last 60 mins were successful (HTTP Response Code: 200) as measured at API Gateway ",
         signalQuery         = <<-EOT
             AppRequests
                 | where Url !contains "localhost" and Url !contains "/hc"
