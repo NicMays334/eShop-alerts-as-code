@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      name: Manual End to End Deployment
+      name:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'execution name'
         # Default value if no value is explicitly provided
