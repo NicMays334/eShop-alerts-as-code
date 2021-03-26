@@ -1,18 +1,15 @@
 # Configure the Azure provider
 terraform {
-    required_providers {
-        azurerm = {
-                source = "hashicorp/azurerm"
-                version = ">= 2.26"
-        }
+    backend "azurerm" {
+        resource_group_name  = "rg-gh-alertAsCodeLab-tf"
+        storage_account_name = "saghalertcodelabtf"
+        container_name       = "terraform-state"
+        key                  = "terraform.tfstate"
     }
 }
 
 provider "azurerm" {
-    #subscription_id = var.AZ_SUBSCRIPTION_ID
-    #client_id       = var.AZ_CLIENT_ID
-    #client_secret   = var.AZ_CLIENT_SECRET
-    #tenant_id       = var.AZ_TENANT_ID
+    version = ">= 2.26"
     features {}
 }
 
