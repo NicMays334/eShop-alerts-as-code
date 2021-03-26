@@ -1,4 +1,7 @@
 on:
+  pull_request:
+    branches: [ master ]
+
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -9,6 +12,7 @@ on:
         default: 'default execution'
         # Input has to be provided for the workflow to run
         required: false
+      
 
 defaults:
   run:
@@ -35,7 +39,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }}
+        run: terraform plan -var="logAnalyticsResourceGroupName=eShop-Alert-Automation" -var=${{ secrets.VAR_LA_RESOURCE_ID }} -out=alertPlan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply alertPlan -auto-approve
